@@ -39,6 +39,7 @@ const stationOrder = [
   'elektrik',
   'wasser',
   'aufbau',
+  'nachtwache',
   'kuechenzelt',
   'getraenkeausschank',
   'spuelzelt',
