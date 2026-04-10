@@ -19,6 +19,7 @@ export function DashboardHeader({
 }: DashboardHeaderProps) {
   return (
     <header
+      data-dashboard-header="true"
       className={[
         'z-30 border-b border-slate-200/70 bg-white/85 shadow-sm backdrop-blur-md',
         sticky ? 'sticky top-0' : 'relative',

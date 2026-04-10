@@ -56,7 +56,10 @@ function App() {
     const reportHeight = () => {
       cancelAnimationFrame(frameId);
       frameId = requestAnimationFrame(() => {
-        const height = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+        const height = Math.max(
+          document.body.scrollHeight,
+          document.documentElement.scrollHeight
+        );
 
         if (Math.abs(height - lastReportedHeight) < 2) {
           return;
@@ -89,6 +92,32 @@ function App() {
       window.removeEventListener('resize', reportHeight);
     };
   }, [isEmbedded, stations, expandedStationId, loading, errorMessage]);
+
+  useEffect(() => {
+    if (!expandedStationId) {
+      return;
+    }
+
+    const frameId = requestAnimationFrame(() => {
+      const targetCard = document.getElementById(`station-card-${expandedStationId}`);
+      if (!targetCard) {
+        return;
+      }
+
+      const header = document.querySelector<HTMLElement>('[data-dashboard-header="true"]');
+      const headerOffset = header ? header.getBoundingClientRect().height : 0;
+      const targetTop = targetCard.getBoundingClientRect().top + window.scrollY - headerOffset - 16;
+
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: 'smooth',
+      });
+    });
+
+    return () => {
+      cancelAnimationFrame(frameId);
+    };
+  }, [expandedStationId]);
 
   const fetchData = async () => {
     try {
@@ -182,20 +211,21 @@ function App() {
               const isExpanded = expandedStationId === station.id;
 
               return (
-                <StationCard
-                  key={station.id}
-                  station={station}
-                  expanded={isExpanded}
-                  stationInputValue={inputValues[station.id] || ''}
-                  shiftInputValues={Object.fromEntries(
-                    (station.shifts ?? []).map((_, index) => [index, inputValues[`${station.id}-${index}`] || ''])
-                  )}
-                  onToggle={() => toggleStation(station.id)}
-                  onStationInputChange={(event) => handleInputChange(event, station.id)}
-                  onStationSubmit={(event) => handleVolunteerSubmit(event, station.id)}
-                  onShiftInputChange={(index, event) => handleInputChange(event, station.id, index)}
-                  onShiftSubmit={(index, event) => handleVolunteerSubmit(event, station.id, index)}
-                />
+                <div key={station.id} id={`station-card-${station.id}`}>
+                  <StationCard
+                    station={station}
+                    expanded={isExpanded}
+                    stationInputValue={inputValues[station.id] || ''}
+                    shiftInputValues={Object.fromEntries(
+                      (station.shifts ?? []).map((_, index) => [index, inputValues[`${station.id}-${index}`] || ''])
+                    )}
+                    onToggle={() => toggleStation(station.id)}
+                    onStationInputChange={(event) => handleInputChange(event, station.id)}
+                    onStationSubmit={(event) => handleVolunteerSubmit(event, station.id)}
+                    onShiftInputChange={(index, event) => handleInputChange(event, station.id, index)}
+                    onShiftSubmit={(index, event) => handleVolunteerSubmit(event, station.id, index)}
+                  />
+                </div>
               );
             })}
           </div>
