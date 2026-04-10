@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Clock, Users, ChevronDown, ChevronUp } from 'lucide-react';
-import { addVolunteer, dataSourceLabel, dataSourceNote, fetchStations } from './lib/dataSource';
+import { addVolunteer, dataSourceLabel, dataSourceNote, fetchStations, subscribeToDataChanges } from './lib/dataSource';
 import type { Station } from './types';
 
 function App() {
@@ -11,7 +11,15 @@ function App() {
   const [expandedStations, setExpandedStations] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    fetchData();
+    void fetchData();
+
+    const unsubscribe = subscribeToDataChanges(() => {
+      void fetchData();
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const fetchData = async () => {

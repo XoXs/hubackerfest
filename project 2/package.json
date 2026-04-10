@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "generate:local-db": "node scripts/generate-local-db.mjs",
+    "generate:supabase-bootstrap": "node scripts/generate-supabase-bootstrap.mjs",
     "predev": "node scripts/generate-local-db.mjs",
     "prebuild": "node scripts/generate-local-db.mjs",
     "dev": "vite",

@@ -1,5 +1,5 @@
-import { createClient } from '@supabase/supabase-js';
 import { localDatabaseSnapshot } from '../generated/localDatabase';
+import { hasSupabaseConfig, supabase } from './supabase';
 import type { Station } from '../types';
 
 type StationRow = {
@@ -50,44 +50,14 @@ const stationOrder = [
   'abbau',
 ] as const;
 
-const localVolunteersKey = 'hubackerfest-local-volunteers';
 const configuredDataSource = import.meta.env.VITE_DATA_SOURCE?.toLowerCase();
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-const hasSupabaseConfig = Boolean(supabaseUrl && supabaseAnonKey);
-const useSupabase = configuredDataSource === 'supabase' && hasSupabaseConfig;
-
-const supabase = useSupabase ? createClient(supabaseUrl!, supabaseAnonKey!) : null;
+const useLocalData = configuredDataSource === 'local';
+const useSupabase = !useLocalData && hasSupabaseConfig;
 
 export const dataSourceLabel = useSupabase ? 'Supabase' : 'Lokale Datenbank';
 export const dataSourceNote = useSupabase
-  ? 'Live-Daten aus der Supabase-Instanz.'
-  : 'Aus dem Backup im Projektordner geladen. Neue Einträge werden in diesem Browser gespeichert.';
-
-function getLocalVolunteers(): VolunteerRow[] {
-  if (typeof window === 'undefined') {
-    return [];
-  }
-
-  const rawValue = window.localStorage.getItem(localVolunteersKey);
-  if (!rawValue) {
-    return [];
-  }
-
-  try {
-    return JSON.parse(rawValue) as VolunteerRow[];
-  } catch {
-    return [];
-  }
-}
-
-function saveLocalVolunteers(volunteers: VolunteerRow[]) {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  window.localStorage.setItem(localVolunteersKey, JSON.stringify(volunteers));
-}
+  ? 'Gemeinsame Live-Daten aus Supabase. Neue Einträge sind für alle sofort sichtbar.'
+  : 'Lokaler Fallback aus dem Projekt-Backup. Änderungen werden nicht gemeinsam synchronisiert.';
 
 function buildStations(
   stationsData: StationRow[],
@@ -155,15 +125,16 @@ function getLocalSnapshot() {
       ...shift,
       max_spots: Number(shift.max_spots),
     })) as ShiftRow[],
-    volunteers: [
-      ...(localDatabaseSnapshot.volunteers.map((volunteer) => ({ ...volunteer })) as VolunteerRow[]),
-      ...getLocalVolunteers(),
-    ],
+    volunteers: localDatabaseSnapshot.volunteers.map((volunteer) => ({ ...volunteer })) as VolunteerRow[],
   };
 }
 
 export async function fetchStations(): Promise<Station[]> {
   if (!supabase) {
+    if (!useLocalData) {
+      throw new Error('Supabase ist nicht konfiguriert. Setze VITE_SUPABASE_URL und VITE_SUPABASE_ANON_KEY.');
+    }
+
     const snapshot = getLocalSnapshot();
     return buildStations(snapshot.stations, snapshot.shifts, snapshot.volunteers);
   }
@@ -192,20 +163,7 @@ export async function fetchStations(): Promise<Station[]> {
 
 export async function addVolunteer({ stationId, shiftId = null, name }: VolunteerInput) {
   if (!supabase) {
-    const volunteers = getLocalVolunteers();
-    const volunteer: VolunteerRow = {
-      id:
-        typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-          ? crypto.randomUUID()
-          : `local-${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      station_id: stationId,
-      shift_id: shiftId,
-      name,
-      created_at: new Date().toISOString(),
-    };
-
-    saveLocalVolunteers([...volunteers, volunteer]);
-    return;
+    throw new Error('Supabase ist nicht konfiguriert. Einträge können nicht gemeinsam gespeichert werden.');
   }
 
   const { error } = await supabase.from('volunteers').insert([
@@ -219,4 +177,21 @@ export async function addVolunteer({ stationId, shiftId = null, name }: Voluntee
   if (error) {
     throw error;
   }
+}
+
+export function subscribeToDataChanges(onChange: () => void) {
+  if (!supabase) {
+    return () => undefined;
+  }
+
+  const channel = supabase
+    .channel('hubackerfest-live-data')
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'stations' }, onChange)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'shifts' }, onChange)
+    .on('postgres_changes', { event: '*', schema: 'public', table: 'volunteers' }, onChange)
+    .subscribe();
+
+  return () => {
+    void supabase.removeChannel(channel);
+  };
 }
