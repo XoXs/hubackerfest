@@ -18,9 +18,9 @@ export function VolunteerList({ volunteers, tone }: VolunteerListProps) {
 
   return (
     <ul className="flex flex-col gap-2">
-      {volunteers.map((volunteer) => (
+      {volunteers.map((volunteer, index) => (
         <li
-          key={volunteer}
+          key={`${volunteer}-${index}`}
           className="flex items-center gap-3 rounded-xl border border-slate-100 bg-slate-50/70 p-2.5"
         >
           <div
