@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { AppFooter } from './components/AppFooter';
 import { DashboardHeader } from './components/DashboardHeader';
 import { SectionHeader } from './components/SectionHeader';
 import { StationCard } from './components/StationCard';
@@ -51,16 +52,18 @@ function App() {
     }
 
     let frameId = 0;
+    let lastReportedHeight = 0;
 
     const reportHeight = () => {
       cancelAnimationFrame(frameId);
       frameId = requestAnimationFrame(() => {
-        const height = Math.max(
-          document.body.scrollHeight,
-          document.body.offsetHeight,
-          document.documentElement.scrollHeight,
-          document.documentElement.offsetHeight
-        );
+        const height = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+
+        if (Math.abs(height - lastReportedHeight) < 2) {
+          return;
+        }
+
+        lastReportedHeight = height;
 
         window.parent.postMessage(
           {
@@ -105,7 +108,7 @@ function App() {
     e.preventDefault();
     const inputKey = shiftIndex !== undefined ? `${stationId}-${shiftIndex}` : stationId;
     const name = inputValues[inputKey]?.trim();
-    
+
     if (!name) return;
 
     try {
@@ -123,9 +126,9 @@ function App() {
         name,
       });
 
-      setInputValues(prev => ({
+      setInputValues((prev) => ({
         ...prev,
-        [inputKey]: ''
+        [inputKey]: '',
       }));
 
       await fetchData();
@@ -137,14 +140,14 @@ function App() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, stationId: string, shiftIndex?: number) => {
     const inputKey = shiftIndex !== undefined ? `${stationId}-${shiftIndex}` : stationId;
-    setInputValues(prev => ({
+    setInputValues((prev) => ({
       ...prev,
-      [inputKey]: e.target.value
+      [inputKey]: e.target.value,
     }));
   };
 
   const toggleStation = (stationId: string) => {
-    setExpandedStations(prev => {
+    setExpandedStations((prev) => {
       const newSet = new Set(prev);
       if (newSet.has(stationId)) {
         newSet.delete(stationId);
@@ -207,6 +210,8 @@ function App() {
           </div>
         </section>
       </main>
+
+      <AppFooter />
     </div>
   );
 }
