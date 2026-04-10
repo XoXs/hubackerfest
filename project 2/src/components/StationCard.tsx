@@ -94,10 +94,10 @@ export function StationCard({
           </div>
         </div>
 
-        <div className={`flex shrink-0 items-center gap-2 rounded-xl border px-3 py-1.5 text-sm font-semibold ${currentToneClasses.badge}`}>
-          <Users className={`h-4 w-4 ${currentToneClasses.icon}`} />
+        <div className={`flex shrink-0 items-center gap-2 rounded-xl border px-3 py-1.5 text-sm font-semibold ${toneClasses.badge}`}>
+          <Users className={`h-4 w-4 ${toneClasses.icon}`} />
           <span>
-            {currentVolunteerCount}/{currentMaxSpots}
+            {volunteerCount}/{maxSpots}
           </span>
           {expanded ? <ChevronUp className="h-4 w-4 text-slate-400" /> : <ChevronDown className="h-4 w-4 text-slate-400" />}
         </div>
