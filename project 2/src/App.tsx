@@ -13,7 +13,7 @@ function App() {
   const [stations, setStations] = useState<Station[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [expandedStations, setExpandedStations] = useState<Set<string>>(new Set());
+  const [expandedStationId, setExpandedStationId] = useState<string | null>(null);
   const [isEmbedded, setIsEmbedded] = useState(false);
 
   useEffect(() => {
@@ -88,7 +88,7 @@ function App() {
       window.removeEventListener('load', reportHeight);
       window.removeEventListener('resize', reportHeight);
     };
-  }, [isEmbedded, stations, expandedStations, loading, errorMessage]);
+  }, [isEmbedded, stations, expandedStationId, loading, errorMessage]);
 
   const fetchData = async () => {
     try {
@@ -146,15 +146,7 @@ function App() {
   };
 
   const toggleStation = (stationId: string) => {
-    setExpandedStations(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(stationId)) {
-        newSet.delete(stationId);
-      } else {
-        newSet.add(stationId);
-      }
-      return newSet;
-    });
+    setExpandedStationId((currentId) => (currentId === stationId ? null : stationId));
   };
 
   const overallStats = getOverallStats(stations);
@@ -187,7 +179,7 @@ function App() {
           <SectionHeader />
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             {stations.map((station) => {
-              const isExpanded = expandedStations.has(station.id);
+              const isExpanded = expandedStationId === station.id;
 
               return (
                 <StationCard
