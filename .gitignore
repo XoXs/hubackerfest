@@ -1,0 +1,12 @@
+# macOS
+.DS_Store
+
+# Tooling
+project 2/.bolt
+
+# Local environment files
+project 2/.env
+
+# Dependencies and build output
+project 2/node_modules
+project 2/dist
