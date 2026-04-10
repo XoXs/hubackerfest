@@ -6,6 +6,7 @@ type DashboardHeaderProps = {
   locationLabel: string;
   utilization: number;
   errorMessage?: string | null;
+  sticky?: boolean;
 };
 
 export function DashboardHeader({
@@ -14,9 +15,15 @@ export function DashboardHeader({
   locationLabel,
   utilization,
   errorMessage,
+  sticky = true,
 }: DashboardHeaderProps) {
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200/70 bg-white/85 shadow-sm backdrop-blur-md">
+    <header
+      className={[
+        'z-30 border-b border-slate-200/70 bg-white/85 shadow-sm backdrop-blur-md',
+        sticky ? 'sticky top-0' : 'relative',
+      ].join(' ')}
+    >
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>

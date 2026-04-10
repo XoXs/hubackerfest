@@ -6,12 +6,32 @@ import { addVolunteer, fetchStations, subscribeToDataChanges } from './lib/dataS
 import { getOverallStats } from './lib/ui';
 import type { Station } from './types';
 
+const EMBED_RESIZE_MESSAGE = 'hubackerfest:resize';
+
 function App() {
   const [inputValues, setInputValues] = useState<{ [key: string]: string }>({});
   const [stations, setStations] = useState<Station[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [expandedStations, setExpandedStations] = useState<Set<string>>(new Set());
+  const [isEmbedded, setIsEmbedded] = useState(false);
+
+  useEffect(() => {
+    const embedded = window.self !== window.top;
+    setIsEmbedded(embedded);
+
+    if (!embedded) {
+      return;
+    }
+
+    document.documentElement.dataset.embedded = 'true';
+    document.body.dataset.embedded = 'true';
+
+    return () => {
+      delete document.documentElement.dataset.embedded;
+      delete document.body.dataset.embedded;
+    };
+  }, []);
 
   useEffect(() => {
     void fetchData();
@@ -24,6 +44,49 @@ function App() {
       unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    if (!isEmbedded) {
+      return;
+    }
+
+    let frameId = 0;
+
+    const reportHeight = () => {
+      cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(() => {
+        const height = Math.max(
+          document.body.scrollHeight,
+          document.body.offsetHeight,
+          document.documentElement.scrollHeight,
+          document.documentElement.offsetHeight
+        );
+
+        window.parent.postMessage(
+          {
+            type: EMBED_RESIZE_MESSAGE,
+            height,
+          },
+          '*'
+        );
+      });
+    };
+
+    const resizeObserver = new ResizeObserver(reportHeight);
+    resizeObserver.observe(document.body);
+    resizeObserver.observe(document.documentElement);
+
+    window.addEventListener('load', reportHeight);
+    window.addEventListener('resize', reportHeight);
+    reportHeight();
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      resizeObserver.disconnect();
+      window.removeEventListener('load', reportHeight);
+      window.removeEventListener('resize', reportHeight);
+    };
+  }, [isEmbedded, stations, expandedStations, loading, errorMessage]);
 
   const fetchData = async () => {
     try {
@@ -105,7 +168,7 @@ function App() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[var(--page-bg)] text-slate-800">
+    <div className="relative min-h-screen overflow-x-hidden bg-[var(--page-bg)] text-slate-800">
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-96 bg-gradient-to-b from-emerald-50/80 to-transparent" />
 
       <DashboardHeader
@@ -114,6 +177,7 @@ function App() {
         locationLabel="Festplatz am Hubacker"
         utilization={overallStats.utilization}
         errorMessage={errorMessage}
+        sticky={!isEmbedded}
       />
 
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 md:py-12 lg:px-8">
