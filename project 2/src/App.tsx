@@ -98,24 +98,46 @@ function App() {
       return;
     }
 
+    const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+    if (!isMobileViewport || !isTouchDevice) {
+      return;
+    }
+
+    let timeoutId: number | null = null;
     const frameId = requestAnimationFrame(() => {
-      const targetCard = document.getElementById(`station-card-${expandedStationId}`);
-      if (!targetCard) {
-        return;
-      }
+      timeoutId = window.setTimeout(() => {
+        const targetCard = document.getElementById(`station-card-${expandedStationId}`);
+        if (!targetCard) {
+          return;
+        }
 
-      const header = document.querySelector<HTMLElement>('[data-dashboard-header="true"]');
-      const headerOffset = header ? header.getBoundingClientRect().height : 0;
-      const targetTop = targetCard.getBoundingClientRect().top + window.scrollY - headerOffset - 16;
+        const header = document.querySelector<HTMLElement>('[data-dashboard-header="true"]');
+        const headerOffset = header ? header.getBoundingClientRect().height : 0;
+        const desiredTop = headerOffset + 20;
+        const targetRect = targetCard.getBoundingClientRect();
+        const isTooHigh = targetRect.top < desiredTop;
+        const isTooLow = targetRect.top > window.innerHeight * 0.42;
 
-      window.scrollTo({
-        top: Math.max(0, targetTop),
-        behavior: 'smooth',
-      });
+        if (!isTooHigh && !isTooLow) {
+          return;
+        }
+
+        const nextTop = window.scrollY + targetRect.top - desiredTop;
+
+        window.scrollTo({
+          top: Math.max(0, nextTop),
+          behavior: 'smooth',
+        });
+      }, 140);
     });
 
     return () => {
       cancelAnimationFrame(frameId);
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
     };
   }, [expandedStationId]);
 
