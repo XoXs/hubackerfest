@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DashboardHeader } from './components/DashboardHeader';
 import { SectionHeader } from './components/SectionHeader';
 import { StationCard } from './components/StationCard';
@@ -15,6 +15,7 @@ function App() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [expandedStationId, setExpandedStationId] = useState<string | null>(null);
   const [isEmbedded, setIsEmbedded] = useState(false);
+  const pendingScrollAnchorRef = useRef<{ stationId: string; top: number } | null>(null);
 
   useEffect(() => {
     const embedded = window.self !== window.top;
@@ -93,53 +94,40 @@ function App() {
     };
   }, [isEmbedded, stations, expandedStationId, loading, errorMessage]);
 
-  useEffect(() => {
-    if (!expandedStationId) {
+  useLayoutEffect(() => {
+    const pendingAnchor = pendingScrollAnchorRef.current;
+    if (!pendingAnchor) {
       return;
     }
 
     const isMobileViewport = window.matchMedia('(max-width: 767px)').matches;
     const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    const shouldStabilizeScroll = isEmbedded && isMobileViewport && isTouchDevice;
 
-    if (!isMobileViewport || !isTouchDevice) {
+    if (!shouldStabilizeScroll) {
+      pendingScrollAnchorRef.current = null;
       return;
     }
 
-    let timeoutId: number | null = null;
-    const frameId = requestAnimationFrame(() => {
-      timeoutId = window.setTimeout(() => {
-        const targetCard = document.getElementById(`station-card-${expandedStationId}`);
-        if (!targetCard) {
-          return;
-        }
+    const targetCard = document.getElementById(`station-card-${pendingAnchor.stationId}`);
+    pendingScrollAnchorRef.current = null;
 
-        const header = document.querySelector<HTMLElement>('[data-dashboard-header="true"]');
-        const headerOffset = header ? header.getBoundingClientRect().height : 0;
-        const desiredTop = headerOffset + 20;
-        const targetRect = targetCard.getBoundingClientRect();
-        const isTooHigh = targetRect.top < desiredTop;
-        const isTooLow = targetRect.top > window.innerHeight * 0.42;
+    if (!targetCard) {
+      return;
+    }
 
-        if (!isTooHigh && !isTooLow) {
-          return;
-        }
+    const nextTop = targetCard.getBoundingClientRect().top;
+    const scrollDelta = nextTop - pendingAnchor.top;
 
-        const nextTop = window.scrollY + targetRect.top - desiredTop;
+    if (Math.abs(scrollDelta) < 2) {
+      return;
+    }
 
-        window.scrollTo({
-          top: Math.max(0, nextTop),
-          behavior: 'smooth',
-        });
-      }, 140);
+    window.scrollBy({
+      top: scrollDelta,
+      behavior: 'auto',
     });
-
-    return () => {
-      cancelAnimationFrame(frameId);
-      if (timeoutId !== null) {
-        window.clearTimeout(timeoutId);
-      }
-    };
-  }, [expandedStationId]);
+  }, [expandedStationId, isEmbedded]);
 
   const fetchData = async () => {
     try {
@@ -197,6 +185,11 @@ function App() {
   };
 
   const toggleStation = (stationId: string) => {
+    const stationCard = document.getElementById(`station-card-${stationId}`);
+    pendingScrollAnchorRef.current = stationCard
+      ? { stationId, top: stationCard.getBoundingClientRect().top }
+      : null;
+
     setExpandedStationId((currentId) => (currentId === stationId ? null : stationId));
   };
 
