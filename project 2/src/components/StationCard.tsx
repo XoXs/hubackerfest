@@ -69,6 +69,10 @@ export function StationCard({
   }, [activeShiftIndex, station.shifts]);
 
   const getShiftLabel = (index: number, start: string) => {
+    if (station.id === 'aufbau') {
+      return index === 0 ? 'Lager ausräumen' : 'Aufbau Festgelände';
+    }
+
     if (start === '14:30') {
       return 'Springer';
     }
@@ -155,7 +159,11 @@ export function StationCard({
                           ].join(' ')}
                         >
                           <div className="flex items-center justify-between gap-3">
-                            <span>{getShiftLabel(index, shift.start)} ({shift.start}-{shift.end})</span>
+                            <span>
+                              {station.id === 'aufbau'
+                                ? `${getShiftLabel(index, shift.start)} (${shift.start} Uhr)`
+                                : `${getShiftLabel(index, shift.start)} (${shift.start}-${shift.end})`}
+                            </span>
                             <span className="flex items-center gap-2">
                               <span className={`h-2.5 w-2.5 rounded-full ${shiftRemaining > 0 ? shiftToneClasses.progress : 'bg-rose-500'}`} />
                               <span className="text-xs font-bold tabular-nums text-slate-500">
@@ -163,6 +171,11 @@ export function StationCard({
                               </span>
                             </span>
                           </div>
+                          {station.id === 'aufbau' && (
+                            <div className="mt-1 text-xs font-medium text-slate-500">
+                              {shift.end}
+                            </div>
+                          )}
                         </button>
                       );
                     })}
