@@ -39,6 +39,11 @@ export function DashboardHeader({
                 <span>{locationLabel}</span>
               </div>
             </div>
+
+            <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+              <span className="font-semibold">Hinweis:</span> Am Freitag, 15. Mai, findet ab 17:30 Uhr am
+              Gruppenraum unser gemeinsames Helferfest statt.
+            </div>
           </div>
 
           <div className="flex items-center gap-3 self-start rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-3 md:self-auto">
