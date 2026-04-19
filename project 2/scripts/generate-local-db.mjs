@@ -101,6 +101,14 @@ const stationOverrides = {
     max_spots: '4',
     created_at: '2026-04-10 16:30:00+00',
   },
+  'kuchenannahme-turnhalle': {
+    name: 'Kuchenannahme Turnhalle',
+    description: 'Annahme/Lagern der Kuchen in der Turnhalle und verladen fürs Fest.',
+    date: 'Do 14.5',
+    time: '8:45 - 11:00 Uhr',
+    max_spots: '2',
+    created_at: '2026-04-19 10:00:00+00',
+  },
   aufraeumen: {
     description: 'Aufräumen des Festgeländes und Abschlussarbeiten am Abend.',
   },
