@@ -34,6 +34,15 @@ export const stations: Station[] = [
     volunteers: []
   },
   {
+    id: 'kuchenannahme-turnhalle',
+    name: 'Kuchenannahme Turnhalle',
+    description: 'Annahme/Lagern der Kuchen in der Turnhalle und verladen fürs Fest.',
+    date: 'Do 14.5',
+    time: '8:45 - 11:00 Uhr',
+    maxSpots: 2,
+    volunteers: []
+  },
+  {
     id: 'abraeumen',
     name: 'Abräumen',
     date: 'Fr',
