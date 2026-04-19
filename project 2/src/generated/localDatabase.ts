@@ -3,7 +3,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "getraenkeausschank",
       "name": "Getränkeausschank",
-      "description": null,
+      "description": "Ausgabe von alkoholfreien Getränken und Organisation am Ausschank.",
       "date": "Do 29.5",
       "time": "",
       "max_spots": "8",
@@ -12,7 +12,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "kuchenzelt",
       "name": "Kuchenzelt",
-      "description": null,
+      "description": "Verkauf und Ausgabe von Kuchen und Kaffee.",
       "date": "Do 29.5",
       "time": "",
       "max_spots": "8",
@@ -21,7 +21,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "kuechenzelt",
       "name": "Küchenzelt",
-      "description": null,
+      "description": "Zubereitung und Ausgabe der Speisen.",
       "date": "Do 29.5",
       "time": "",
       "max_spots": "14",
@@ -30,7 +30,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "springer",
       "name": "Springer/Hüpfburg",
-      "description": null,
+      "description": "Flexible Unterstützung an wechselnden Stationen und an der Hüpfburg.",
       "date": "Do 29.5",
       "time": "",
       "max_spots": "6",
@@ -39,7 +39,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "spuelzelt",
       "name": "Spülzelt",
-      "description": null,
+      "description": "Reinigung von Geschirr, Besteck und Küchenutensilien.",
       "date": "Do 29.5",
       "time": "",
       "max_spots": "8",
@@ -48,7 +48,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "abbau",
       "name": "Abbau",
-      "description": null,
+      "description": "Abbau der Festinfrastruktur und gemeinsames Aufräumen nach dem Fest.",
       "date": "Fr 30.5",
       "time": "ab 13:00 Uhr",
       "max_spots": "20",
@@ -57,7 +57,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "ausschankwagen1",
       "name": "Bierwagen 1",
-      "description": null,
+      "description": "Bier- und Getränkeausgabe am ersten Ausschankwagen.",
       "date": "Do 29.5",
       "time": "",
       "max_spots": "11",
@@ -66,7 +66,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "ausschankwagen2",
       "name": "Bierwagen 2",
-      "description": null,
+      "description": "Bier- und Getränkeausgabe am zweiten Ausschankwagen.",
       "date": "Do 29.5",
       "time": "",
       "max_spots": "11",
@@ -75,7 +75,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "elektrik",
       "name": "Elektrik",
-      "description": null,
+      "description": "Betreuung der Stromversorgung und technische Unterstützung.",
       "date": "Di 27.5",
       "time": "",
       "max_spots": "2",
@@ -84,7 +84,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "wasser",
       "name": "Wasser",
-      "description": null,
+      "description": "Versorgung der Stationen mit Wasser und Kontrolle der Anschlüsse.",
       "date": "Di 27.5",
       "time": "",
       "max_spots": "2",
@@ -93,20 +93,47 @@ export const localDatabaseSnapshot = {
     {
       "id": "aufbau",
       "name": "Aufbau",
-      "description": "Aufbau der Festinfrastruktur",
-      "date": "Mi 28.5",
-      "time": "17:00 - 21:00",
-      "max_spots": "20",
+      "description": "Aufbauarbeiten rund um Lager und Festgelände.",
+      "date": "Mi 13.5",
+      "time": "",
+      "max_spots": "18",
       "created_at": "2025-04-12 11:43:54.173029+00"
     },
     {
       "id": "aufraeumen",
       "name": "Aufräumteam",
-      "description": null,
+      "description": "Aufräumen des Festgeländes und Abschlussarbeiten am Abend.",
       "date": "Do 29.5",
       "time": "ab 18:00 Uhr",
       "max_spots": "6",
       "created_at": "2025-04-12 11:43:54.173029+00"
+    },
+    {
+      "id": "vorbereitungen",
+      "name": "Vorbereitungen",
+      "description": "Letzte Aufbau Arbeiten/ Vorbereitungen vor Festbeginn",
+      "date": "Do 14.5",
+      "time": "vor Festbeginn",
+      "max_spots": "4",
+      "created_at": "2026-04-10 16:30:00+00"
+    },
+    {
+      "id": "kuchenannahme-turnhalle",
+      "name": "Kuchenannahme Turnhalle",
+      "description": "Annahme/Lagern der Kuchen in der Turnhalle und verladen fürs Fest.",
+      "date": "Do 14.5",
+      "time": "8:45 - 11:00 Uhr",
+      "max_spots": "2",
+      "created_at": "2026-04-19 10:00:00+00"
+    },
+    {
+      "id": "nachtwache",
+      "name": "Nachtwache",
+      "description": "Überwachung des Festgeländes",
+      "date": "Mi 13.5",
+      "time": "ab 21:00 Uhr",
+      "max_spots": "4",
+      "created_at": "2026-04-10 12:00:00+00"
     }
   ],
   "shifts": [
@@ -237,6 +264,22 @@ export const localDatabaseSnapshot = {
       "end_time": "18:00",
       "max_spots": "1",
       "created_at": "2025-04-12 11:55:16.297675+00"
+    },
+    {
+      "id": "f3211f87-4c9f-4f3d-b6f5-60f8c5ef8f11",
+      "station_id": "aufbau",
+      "start_time": "17:00",
+      "end_time": "Treffpunkt am Lager",
+      "max_spots": "6",
+      "created_at": "2026-04-10 16:30:00+00"
+    },
+    {
+      "id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
+      "station_id": "aufbau",
+      "start_time": "17:30",
+      "end_time": "Treffpunkt am Festgelände",
+      "max_spots": "12",
+      "created_at": "2026-04-10 16:30:00+00"
     }
   ],
   "volunteers": [
@@ -271,14 +314,14 @@ export const localDatabaseSnapshot = {
     {
       "id": "517e4fef-fa21-4e0d-8e74-3c80733a72f8",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Andi M.",
       "created_at": "2025-04-14 12:04:48.020706+00"
     },
     {
       "id": "53b1eeb8-979b-46ec-af50-eb5cb1a0aebc",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Niko M.",
       "created_at": "2025-04-14 14:27:38.117915+00"
     },
@@ -467,7 +510,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "f428cf78-e509-4e3e-8133-c20490917b41",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Helena Braun",
       "created_at": "2025-04-22 16:05:11.378256+00"
     },
@@ -495,7 +538,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "52229961-75dd-4fdc-b290-4d4716d5c661",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Lea L.",
       "created_at": "2025-04-22 16:19:22.56983+00"
     },
@@ -544,7 +587,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "34b5fcd2-ee30-4c35-8ba3-0142f999dab4",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Celine B.",
       "created_at": "2025-04-22 16:30:21.696757+00"
     },
@@ -565,7 +608,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "3ed0334f-1c9f-486e-85dd-13d6640aec68",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Kerstin B.",
       "created_at": "2025-04-22 16:52:38.020069+00"
     },
@@ -642,7 +685,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "90701dfc-e68c-4528-b6bb-3f4364f425eb",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Maike H.",
       "created_at": "2025-04-22 19:24:43.516358+00"
     },
@@ -677,7 +720,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "a7feeea4-938f-455d-9f37-7f9119e78640",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Julia Kreider",
       "created_at": "2025-04-23 06:04:44.106005+00"
     },
@@ -691,14 +734,14 @@ export const localDatabaseSnapshot = {
     {
       "id": "d02aad04-5bfc-4158-a034-427399545b99",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Alica Teufel",
       "created_at": "2025-04-23 12:24:46.02905+00"
     },
     {
       "id": "a52d8b4b-5327-4e55-abb9-0f14e34064ae",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Ann-Kathrin Jüngert",
       "created_at": "2025-04-23 16:19:43.651986+00"
     },
@@ -712,7 +755,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "c109c0be-6d5f-4a5a-ac61-b5648fc05799",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Jürgen S.",
       "created_at": "2025-04-23 18:44:16.215705+00"
     },
@@ -726,7 +769,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "cfc8dd1a-d243-4e21-9873-7c0f32cc3466",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Stefan B.",
       "created_at": "2025-04-25 12:20:44.288735+00"
     },
@@ -768,7 +811,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "ae65bdb5-5948-4549-a6f4-1b320df79f7b",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Helmut M.",
       "created_at": "2025-05-05 08:37:31.464184+00"
     },
@@ -803,7 +846,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "50649710-667e-498f-ac41-573b52c3f199",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Maria Doll",
       "created_at": "2025-05-06 09:35:46.550588+00"
     },
@@ -817,7 +860,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "8df200b9-21a7-4bc8-b401-21b0277be947",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Tabea",
       "created_at": "2025-05-12 10:02:49.698364+00"
     },
@@ -831,14 +874,14 @@ export const localDatabaseSnapshot = {
     {
       "id": "32a43b4d-1b49-4e95-9414-3942480f5732",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Xenia B.",
       "created_at": "2025-05-18 06:06:42.620534+00"
     },
     {
       "id": "ccdde302-00e5-462d-a8db-99a8c0f26111",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Anita Rendler",
       "created_at": "2025-05-20 06:48:13.658863+00"
     },
@@ -880,7 +923,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "c8a10589-9504-4628-b397-1459170bb216",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Linda Huber",
       "created_at": "2025-05-23 17:49:48.729102+00"
     },
@@ -908,7 +951,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "c53acb21-bd24-4e7f-8a25-b7aa1dff7350",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Simone Huber",
       "created_at": "2025-05-25 19:00:54.78155+00"
     },
@@ -936,7 +979,7 @@ export const localDatabaseSnapshot = {
     {
       "id": "0083e90d-eb0c-4b0d-99b2-7c9910cb9ed5",
       "station_id": "aufbau",
-      "shift_id": null,
+      "shift_id": "a8af1ee0-6fd3-42df-a0f5-17d76f5e8d22",
       "name": "Wolfgang Fies",
       "created_at": "2025-05-30 06:50:56.442478+00"
     }
