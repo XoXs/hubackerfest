@@ -41,6 +41,7 @@ const stationOrder = [
   'aufbau',
   'vorbereitungen',
   'nachtwache',
+  'kuchenannahme-turnhalle',
   'kuechenzelt',
   'getraenkeausschank',
   'spuelzelt',
